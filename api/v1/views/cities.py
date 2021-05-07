@@ -46,6 +46,9 @@ def city_post(state_id):
         return make_response("Not a JSON", 400)
     if 'name' not in obj:
         return make_response("Missing name", 400)
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
     obj['state_id'] = state_id
     city = City(**obj)
     storage.new(city)
