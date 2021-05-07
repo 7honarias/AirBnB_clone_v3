@@ -49,10 +49,9 @@ def route_delete_place(place_id=None):
                  strict_slashes=False)
 def route_post_place(city_id):
     """Places city route """
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     if 'name' not in obj:
         abort(400, 'Missing name')
     if 'user_id' not in obj:
@@ -71,10 +70,9 @@ def route_post_place(city_id):
 @app_views.route('/places/<place_id>', methods=['PUT'])
 def places_put(review_id=None):
     """ States PUT route """
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)

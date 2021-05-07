@@ -32,10 +32,9 @@ def route_amenitie(amenitie_id=None):
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def amenitie_post():
     """Amenitie POST Route"""
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     if 'name' not in obj:
         abort(400, 'Missing name')
     amenitie = Amenity(**obj)
@@ -47,10 +46,9 @@ def amenitie_post():
 @app_views.route('/amenities/<amenitie_id>', methods=['PUT'])
 def amenitie_put(amenitie_id=None):
     """Amenitie PUT route """
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     amenitie = storage.get(Amenity, amenitie_id)
     if amenitie is None:
         abort(404)

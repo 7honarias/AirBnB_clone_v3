@@ -50,10 +50,9 @@ def route_post(place_id):
     """State POST Route 32c11d3d-99a1-4406-ab41-7b6ccb7dd760 user
      place 3ebfaf23-cede-4cf0-964d-8afc17b11d02
     """
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     if 'text' not in obj:
         abort(400, 'Missing text')
     if 'user_id' not in obj:
@@ -72,10 +71,9 @@ def route_post(place_id):
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
 def reviews_put(review_id=None):
     """ States PUT route """
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)

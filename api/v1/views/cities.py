@@ -40,10 +40,9 @@ def cities_get_delete(state_id=None, city_id=None):
                  methods=['POST'], strict_slashes=False)
 def city_post(state_id):
     """Cities POST Route"""
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     if 'name' not in obj:
         abort(400, 'Missing name')
     obj['state_id'] = state_id
@@ -57,10 +56,9 @@ def city_post(state_id):
 def cities_put(city_id=None):
     """ Cities PUT route """
     ignore_keys = ['updated_at', 'created_at', 'id', 'state_id']
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     city = storage.get(City, city_id)
     if city is None:
         abort(404)

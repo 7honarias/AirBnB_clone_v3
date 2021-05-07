@@ -32,10 +32,9 @@ def routu_users(users_id=None):
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
 def user_post():
     """user POST Route"""
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     if 'email' not in obj:
         abort(400, 'Missing email')
     elif 'password' not in obj:
@@ -49,10 +48,9 @@ def user_post():
 @app_views.route('/users/<user_id>', methods=['PUT'])
 def user_put(user_id=None):
     """Users PUT route """
-    try:
-        obj = request.get_json()
-    except Exception:
-        abort(400, 'Not a JSON')
+    obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
