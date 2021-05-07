@@ -12,11 +12,13 @@ from flask import Flask, jsonify
 
 @app_views.route('/status', strict_slashes=False)
 def route_status():
+    """route return status"""
     return jsonify({"status": "OK"})
 
 
 @app_views.route('/stats', strict_slashes=False)
 def statsRoute():
+    """route prub"""
     dircount = {}
     dir_clases = {
         "amenities": "Amenity",
