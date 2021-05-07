@@ -60,10 +60,11 @@ def route_post_place(city_id):
         return make_response("Missing user_id", 400)
     city = storage.get(City, city_id)
     user = storage.get(User, obj.user_id)
+
     if city is None or user is None:
         abort(404)
+    obj['city_id'] = city_id
     place = Place(**obj)
-    setattr(place, "city_id", city_id)
     storage.new(place)
     storage.save()
     return make_response(jsonify(place.to_dict()), 201)
