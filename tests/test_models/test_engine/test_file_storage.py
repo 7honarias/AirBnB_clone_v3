@@ -122,21 +122,24 @@ class TestGetCount(unittest.TestCase):
     def test_get(self):
         """Test get filestorage"""
         storage = FileStorage()
-        state = State()
+        obj = {'name': 'California'}
+        state = State(**obj)
         storage.new(state)
-        state.save()
-        objects_all = storage.all(State)
-        first_state_id = list(objects_all.values())[0].id
-        self.assertEqual(storage.get(State, state.id), state)
+        storage.save()
+        stored_stage = storage.get(State, state.id)
+        self.assertEqual(stored_stage, state)
 
     @unittest.skipIf(models.storage_t == 'db', "testng filestorage")
     def test_count(self):
         """ Tests count filestorage """
         storage = FileStorage()
-        state = State()
+        obj = {'name': 'California'}
+        state = State(**obj)
         storage.new(state)
         city = City()
         storage.new(city)
+        place = Place()
+        storage.new(place)
         storage.save()
         count = storage.count()
         self.assertEqual(len(storage.all()), count)

@@ -99,18 +99,19 @@ class TestGetCount(unittest.TestCase):
     def test_get(self):
         """Test get filestorage"""
         storage = DBStorage()
-        state = State()
+        obj = {'name': 'California'}
+        state = State(**obj)
         storage.new(state)
-        state.save()
-        objects_all = storage.all(State)
-        first_state_id = list(objects_all.values())[0].id
-        self.assertEqual(storage.get(State, state.id), state)
+        storage.save()
+        stored_stage = storage.get(State, state.id)
+        self.assertEqual(stored_stage, state)
 
     @unittest.skipIf(models.storage_t != 'db', "testing dbstorage")
     def test_count(self):
         """ Tests count dbstorage """
         storage = DBStorage()
-        state = State()
+        obj = {'name': 'California'}
+        state = State(**obj)
         storage.new(state)
         city = City()
         setattr(city, 'state_id', state.id)
