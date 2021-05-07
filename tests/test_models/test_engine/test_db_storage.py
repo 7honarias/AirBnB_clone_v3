@@ -14,7 +14,6 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from models import storage
 import json
 import os
 import pep8
@@ -88,8 +87,10 @@ class TestFileStorage(unittest.TestCase):
 class TestGetCount(unittest.TestCase):
     """Test for new functions"""
 
+    @unittest.skipIf(models.storage_t != 'db', "testing dbstorage")
     def test_get(self):
         """Test get filestorage"""
+        storage = DBStorage()
         state = State()
         storage.new(state)
         state.save()

@@ -18,7 +18,6 @@ import json
 import os
 import pep8
 import unittest
-from models import storage
 FileStorage = file_storage.FileStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
@@ -119,8 +118,10 @@ class TestFileStorage(unittest.TestCase):
 class TestGetCount(unittest.TestCase):
     """Test for new functions"""
 
+    @unittest.skipIf(models.storage_t == 'db', "testng filestorage")
     def test_get(self):
         """Test get filestorage"""
+        storage = FileStorage()
         state = State()
         storage.new(state)
         state.save()
