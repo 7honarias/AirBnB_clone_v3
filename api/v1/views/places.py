@@ -69,7 +69,7 @@ def route_post_place(city_id):
 
 
 @app_views.route('/places/<place_id>', methods=['PUT'])
-def reviews_put(review_id=None):
+def places_put(review_id=None):
     """ States PUT route """
     try:
         obj = request.get_json()
