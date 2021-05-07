@@ -13,7 +13,8 @@ from flask import make_response
 
 
 @app_views.route('/states/<state_id>/cities', strict_slashes=False)
-@app_views.route('/cities/<city_id>', methods=['GET', 'DELETE'])
+@app_views.route('/cities/<city_id>', methods=['GET', 'DELETE'],
+                 strict_slashes=False)
 def cities_get_delete(state_id=None, city_id=None):
     """ Cities route """
     if state_id is not None:
@@ -44,7 +45,7 @@ def city_post(state_id):
     if obj is None:
         return make_response("Not a JSON", 400)
     if 'name' not in obj:
-        abort(400, 'Missing name')
+        return make_response("Missing name", 400)
     obj['state_id'] = state_id
     city = City(**obj)
     storage.new(city)
@@ -52,7 +53,8 @@ def city_post(state_id):
     return make_response(jsonify(city.to_dict()), 201)
 
 
-@app_views.route('/cities/<city_id>', methods=['PUT'])
+@app_views.route('/cities/<city_id>', methods=['PUT'],
+                 strict_slashes=False)
 def cities_put(city_id=None):
     """ Cities PUT route """
     ignore_keys = ['updated_at', 'created_at', 'id', 'state_id']
