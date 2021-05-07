@@ -56,18 +56,17 @@ def route_post_place(city_id=None):
         abort(404)
     obj = request.get_json()
     if obj is None:
-        return make_response("Not a JSON", 400)
+        abort(400, "Not a JSON")
     if 'user_id' not in obj:
-        return make_response("Missing user_id", 400)
-    user = storage.get(User, obj.user_id)
+        abort(400, "Missing user_id")
+    user = storage.get(User, obj['user_id'])
     if user is None:
         abort(404)
     if 'name' not in obj:
-        return make_response("Missing name", 400)
+        abort(400, "Missing name")
     obj['city_id'] = city_id
     place = Place(**obj)
-    storage.new(place)
-    storage.save()
+    place.save()
     return make_response(jsonify(place.to_dict()), 201)
 
 
