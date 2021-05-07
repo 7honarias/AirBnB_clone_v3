@@ -10,6 +10,7 @@ from flask import Flask, jsonify, abort, request
 from flask import make_response
 """3ebfaf23-cede-4cf0-964d-8afc17b11d02"""
 
+
 @app_views.route('/places/<place_id>/reviews', methods=['GET'])
 def route_users(place_id=None):
     """ place route """
@@ -21,7 +22,7 @@ def route_users(place_id=None):
         for review in (place.reviews):
             new_list.append(review.to_dict())
         return jsonify(new_list)
-    
+
 
 @app_views.route('/reviews/<review_id>', methods=['GET'])
 def route_review(review_id=None):
@@ -30,6 +31,7 @@ def route_review(review_id=None):
     if review is None:
         abort(404)
     return(review.to_dict())
+
 
 @app_views.route('/reviews/<review_id>', methods=['DELETE'])
 def route_delete(review_id=None):
@@ -41,7 +43,9 @@ def route_delete(review_id=None):
     storage.save()
     return jsonify({})
 
-@app_views.route('/places/<place_id>/reviews', methods=['POST'], strict_slashes=False)
+
+@app_views.route('/places/<place_id>/reviews', methods=['POST'],
+                 strict_slashes=False)
 def route_post(place_id):
     """State POST Route 32c11d3d-99a1-4406-ab41-7b6ccb7dd760 user
      place 3ebfaf23-cede-4cf0-964d-8afc17b11d02
@@ -56,13 +60,14 @@ def route_post(place_id):
         abort(400, 'Missing user_id')
     user = storage.get(User, obj['user_id'])
     if user is None:
-        abort(404) 
+        abort(404)
     amenitie = Review(**obj)
     setattr(amenitie, "place_id", place_id)
 
     storage.new(amenitie)
     storage.save()
     return make_response(jsonify(amenitie.to_dict()), 201)
+
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'])
 def reviews_put(review_id=None):

@@ -15,7 +15,6 @@ from flask import make_response
 @app_views.route('/cities/<city_id>/places', methods=['GET'])
 def route_place(city_id=None):
     """ City route dacec983-cec4-4f68-bd7f-af9068a305f5"""
-    
     cities = storage.get(City, city_id)
     if cities is None:
         abort(404)
@@ -25,12 +24,14 @@ def route_place(city_id=None):
             new_list.append(city.to_dict())
     return jsonify(new_list)
 
+
 @app_views.route('/places/<place_id>', methods=['GET'])
 def route_place_id(place_id=None):
     review = storage.get(Place, place_id)
     if review is None:
         abort(404)
     return(review.to_dict())
+
 
 @app_views.route('/places/<place_id>', methods=['DELETE'])
 def route_delete_place(place_id=None):
@@ -42,7 +43,9 @@ def route_delete_place(place_id=None):
     storage.save()
     return jsonify({})
 
-@app_views.route('/cities/<city_id>/places', methods=['POST'], strict_slashes=False)
+
+@app_views.route('/cities/<city_id>/places', methods=['POST'],
+                 strict_slashes=False)
 def route_post_place(city_id):
     """State
     """
@@ -56,13 +59,14 @@ def route_post_place(city_id):
         abort(400, 'Missing user_id')
     city = storage.get(City, obj['city_id'])
     if user is None:
-        abort(404) 
+        abort(404)
     place = Place(**obj)
     setattr(place, "city_id", city_id)
 
     storage.new(place)
     storage.save()
     return make_response(jsonify(place.to_dict()), 201)
+
 
 @app_views.route('/places/<place_id>', methods=['PUT'])
 def reviews_put(review_id=None):

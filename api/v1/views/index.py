@@ -14,6 +14,7 @@ from flask import Flask, jsonify
 def route_status():
     return jsonify({"status": "OK"})
 
+
 @app_views.route('/stats', strict_slashes=False)
 def statsRoute():
     dircount = {}
