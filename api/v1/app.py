@@ -13,6 +13,7 @@ app.register_blueprint(app_views)
 app.url_map.strict_slashes = False
 cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
 
+
 @app.teardown_appcontext
 def teardown(exception):
     """close storage"""
