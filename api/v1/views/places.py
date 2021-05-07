@@ -16,13 +16,12 @@ from flask import make_response
                  strict_slashes=False)
 def route_place(city_id=None):
     """ City route dacec983-cec4-4f68-bd7f-af9068a305f5"""
-    cities = storage.get(City, city_id)
-    if cities is None:
+    city = storage.get(City, city_id)
+    if city is None:
         abort(404)
-    if cities is not None:
-        new_list = []
-        for city in (cities.places):
-            new_list.append(city.to_dict())
+    new_list = []
+    for place in (city.places):
+        new_list.append(place.to_dict())
     return jsonify(new_list)
 
 
@@ -40,10 +39,10 @@ def route_place_id(place_id=None):
                  strict_slashes=False)
 def route_delete_place(place_id=None):
     """ Places route delete """
-    places = storage.get(Place, place_id)
-    if places is None:
+    place = storage.get(Place, place_id)
+    if place is None:
         abort(404)
-    storage.delete(places)
+    storage.delete(place)
     storage.save()
     return jsonify({})
 
@@ -56,15 +55,15 @@ def route_post_place(city_id):
     if obj is None:
         return make_response("Not a JSON", 400)
     if 'name' not in obj:
-        abort(400, 'Missing name')
+        return make_response("Missing name", 400)
     if 'user_id' not in obj:
-        abort(400, 'Missing user_id')
-    city = storage.get(City, obj['city_id'])
-    if city is None:
+        return make_response("Missing user_id", 400)
+    city = storage.get(City, city_id)
+    user = storage.get(User, obj.user_id)
+    if city is None or user is None:
         abort(404)
     place = Place(**obj)
     setattr(place, "city_id", city_id)
-
     storage.new(place)
     storage.save()
     return make_response(jsonify(place.to_dict()), 201)
