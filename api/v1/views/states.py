@@ -40,9 +40,9 @@ def state_post():
     try:
         obj = request.get_json()
     except Exception:
-        abort(400, 'Not a JSON')
+        return make_response("Not a JSON", 400)
     if 'name' not in obj:
-        abort(400, 'Missing name')
+        return make_response("Missing name", 400)
     state = State(**obj)
     storage.new(state)
     storage.save()
@@ -55,7 +55,7 @@ def states_put(state_id=None):
     try:
         obj = request.get_json()
     except Exception:
-        abort(400, 'Not a JSON')
+        return make_response("Not a JSON", 400)
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
