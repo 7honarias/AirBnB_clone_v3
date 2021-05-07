@@ -13,7 +13,8 @@ from flask import make_response
 
 
 @app_views.route('/states', strict_slashes=False)
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE'])
+@app_views.route('/states/<state_id>', methods=['GET', 'DELETE'],
+                 strict_slashes=False)
 def route_states(state_id=None):
     """ States route """
     if state_id is None:
@@ -34,7 +35,8 @@ def route_states(state_id=None):
         return jsonify({})
 
 
-@app_views.route('/states', methods=['POST'], strict_slashes=False)
+@app_views.route('/states', methods=['POST'],
+                 strict_slashes=False)
 def state_post():
     """State POST Route"""
     try:
@@ -49,7 +51,8 @@ def state_post():
     return make_response(jsonify(state.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<state_id>', methods=['PUT'],
+                 strict_slashes=False)
 def states_put(state_id=None):
     """ States PUT route """
     try:
