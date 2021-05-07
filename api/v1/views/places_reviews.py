@@ -51,7 +51,7 @@ def route_post(place_id):
     except Exception:
         abort(400, 'Not a JSON')
     if 'text' not in obj:
-        abort(400, 'Missing name')
+        abort(400, 'Missing text')
     if 'user_id' not in obj:
         abort(400, 'Missing user_id')
     user = storage.get(User, obj['user_id'])
