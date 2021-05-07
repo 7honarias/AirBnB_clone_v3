@@ -39,9 +39,8 @@ def route_states(state_id=None):
                  strict_slashes=False)
 def state_post():
     """State POST Route"""
-    try:
-        obj = request.get_json()
-    except Exception:
+    obj = request.get_json()
+    if obj is None:
         return make_response("Not a JSON", 400)
     if 'name' not in obj:
         return make_response("Missing name", 400)
@@ -55,9 +54,8 @@ def state_post():
                  strict_slashes=False)
 def states_put(state_id=None):
     """ States PUT route """
-    try:
-        obj = request.get_json()
-    except Exception:
+    obj = request.get_json()
+    if obj is None:
         return make_response("Not a JSON", 400)
     state = storage.get(State, state_id)
     if state is None:
