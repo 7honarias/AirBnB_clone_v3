@@ -28,10 +28,10 @@ def route_place(city_id=None):
 @app_views.route('/places/<place_id>', methods=['GET'])
 def route_place_id(place_id=None):
     """ Places route """
-    review = storage.get(Place, place_id)
-    if review is None:
+    place = storage.get(Place, place_id)
+    if place is None:
         abort(404)
-    return(review.to_dict())
+    return(place.to_dict())
 
 
 @app_views.route('/places/<place_id>', methods=['DELETE'])
@@ -57,7 +57,7 @@ def route_post_place(city_id):
     if 'user_id' not in obj:
         abort(400, 'Missing user_id')
     city = storage.get(City, obj['city_id'])
-    if user is None:
+    if city is None:
         abort(404)
     place = Place(**obj)
     setattr(place, "city_id", city_id)
@@ -68,7 +68,7 @@ def route_post_place(city_id):
 
 
 @app_views.route('/places/<place_id>', methods=['PUT'])
-def places_put(review_id=None):
+def places_put(place_id=None):
     """ States PUT route """
     obj = request.get_json()
     if obj is None:
