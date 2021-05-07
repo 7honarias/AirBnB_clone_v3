@@ -11,7 +11,8 @@ from flask import make_response
 """3ebfaf23-cede-4cf0-964d-8afc17b11d02"""
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'])
+@app_views.route('/places/<place_id>/reviews', methods=['GET'],
+                 strict_slashes=False)
 def route_users(place_id=None):
     """ place route """
     place = storage.get(Place, place_id)
@@ -24,7 +25,8 @@ def route_users(place_id=None):
         return jsonify(new_list)
 
 
-@app_views.route('/reviews/<review_id>', methods=['GET'])
+@app_views.route('/reviews/<review_id>', methods=['GET'],
+                 strict_slashes=False)
 def route_review(review_id=None):
     """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
     review = storage.get(Review, review_id)
@@ -33,7 +35,8 @@ def route_review(review_id=None):
     return(review.to_dict())
 
 
-@app_views.route('/reviews/<review_id>', methods=['DELETE'])
+@app_views.route('/reviews/<review_id>', methods=['DELETE'],
+                 strict_slashes=False)
 def route_delete(review_id=None):
     """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
     review = storage.get(Review, review_id)
@@ -68,7 +71,8 @@ def route_post(place_id):
     return make_response(jsonify(amenitie.to_dict()), 201)
 
 
-@app_views.route('/reviews/<review_id>', methods=['PUT'])
+@app_views.route('/reviews/<review_id>', methods=['PUT'],
+                 strict_slashes=False)
 def reviews_put(review_id=None):
     """ States PUT route """
     obj = request.get_json()
