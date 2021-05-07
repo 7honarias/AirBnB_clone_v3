@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+""" Index module flask app """
 from models.amenity import Amenity
 from models import storage
 from models.state import State

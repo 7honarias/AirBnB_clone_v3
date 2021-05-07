@@ -27,6 +27,7 @@ def route_place(city_id=None):
 
 @app_views.route('/places/<place_id>', methods=['GET'])
 def route_place_id(place_id=None):
+    """ Places route """
     review = storage.get(Place, place_id)
     if review is None:
         abort(404)
@@ -35,7 +36,7 @@ def route_place_id(place_id=None):
 
 @app_views.route('/places/<place_id>', methods=['DELETE'])
 def route_delete_place(place_id=None):
-    """f694d9ce-2e60-44b1-95b0-2f4ebe2ed52d"""
+    """ Places route delete """
     places = storage.get(Place, place_id)
     if places is None:
         abort(404)
@@ -47,8 +48,7 @@ def route_delete_place(place_id=None):
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
 def route_post_place(city_id):
-    """State
-    """
+    """Places city route """
     try:
         obj = request.get_json()
     except Exception:
