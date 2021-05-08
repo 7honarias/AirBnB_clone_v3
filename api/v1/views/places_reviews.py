@@ -53,7 +53,7 @@ def route_place_post(place_id):
     """State POST Route 32c11d3d-99a1-4406-ab41-7b6ccb7dd760 user
      place 3ebfaf23-cede-4cf0-964d-8afc17b11d02
     """
-    place = storage.get("Place", place_id)
+    place = storage.get(Place, place_id)
     if place is None:
         abort(404)
     obj = request.get_json()
