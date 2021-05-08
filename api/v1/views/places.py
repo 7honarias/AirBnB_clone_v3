@@ -51,18 +51,19 @@ def route_delete_place(place_id=None):
                  strict_slashes=False)
 def route_post_place(city_id):
     """Places city route """
+    city = storage.get(City, city_id)
+    if city is None or user is None:
+        abort(404)
     obj = request.get_json()
     if obj is None:
         return make_response("Not a JSON", 400)
-    if 'name' not in obj:
-        return make_response("Missing name", 400)
     if 'user_id' not in obj:
         return make_response("Missing user_id", 400)
-    city = storage.get(City, city_id)
     user = storage.get(User, obj.user_id)
-
-    if city is None or user is None:
+    if user is None:
         abort(404)
+    if 'name' not in obj:
+        return make_response("Missing name", 400)
     obj['city_id'] = city_id
     place = Place(**obj)
     storage.new(place)
@@ -74,6 +75,7 @@ def route_post_place(city_id):
                  strict_slashes=False)
 def places_put(place_id=None):
     """ States PUT route """
+    ignore_keys = ['id', 'created_at', 'updated_at', 'city_id', 'user_id']
     obj = request.get_json()
     if obj is None:
         return make_response("Not a JSON", 400)
@@ -81,7 +83,7 @@ def places_put(place_id=None):
     if place is None:
         abort(404)
     for k, v in obj.items():
-        if k not in ['id', 'created_at', 'updated_at', 'city_id', 'user_id']:
+        if k not in ignore_keys:
             setattr(place, k, v)
     storage.save()
     return make_response(jsonify(place.to_dict()), 200)
