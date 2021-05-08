@@ -12,7 +12,7 @@ from models.place import Place
                  strict_slashes=False)
 def get_place_amenities(place_id):
     """get amenity information for a specified place"""
-    place = storage.get("Place", place_id)
+    place = storage.get(Place, place_id)
     if place is None:
         abort(404)
     amenities = []
@@ -29,8 +29,8 @@ def get_place_amenities(place_id):
                  methods=['DELETE'], strict_slashes=False)
 def delete_place_amenity(place_id, amenity_id):
     """deletes an amenity object from a place"""
-    place = storage.get("Place", place_id)
-    amenity = storage.get("Amenity", amenity_id)
+    place = storage.get(Place, place_id)
+    amenity = storage.get(Amenity, amenity_id)
     if place is None or amenity is None:
         abort(404)
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
@@ -48,8 +48,8 @@ def delete_place_amenity(place_id, amenity_id):
                  methods=['POST'], strict_slashes=False)
 def post_place_amenity(place_id, amenity_id):
     """adds an amenity object to a place"""
-    place = storage.get("Place", place_id)
-    amenity = storage.get("Amenity", amenity_id)
+    place = storage.get(Place, place_id)
+    amenity = storage.get(Amenity, amenity_id)
     if place is None or amenity is None:
         abort(404)
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
@@ -60,4 +60,4 @@ def post_place_amenity(place_id, amenity_id):
         return jsonify(amenity.to_dict())
     place_amenities.append(amenity)
     place.save()
-    return make_response(jsonify(amenityto_dict()), 201)
+    return make_response(jsonify(amenity.to_dict()), 201)
