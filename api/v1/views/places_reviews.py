@@ -8,19 +8,18 @@ from models.user import User
 from models.place import Place
 from flask import Flask, jsonify, abort, request
 from flask import make_response
-"""3ebfaf23-cede-4cf0-964d-8afc17b11d02"""
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET'],
                  strict_slashes=False)
 def route_users(place_id=None):
     """ place route """
-    place = storage.get(Place, place_id)
-    if place is None:
-        abort(404)
-    if place is not None:
+    if place_id is not None:
+        place = storage.get(Place, place_id)
+        if place is None:
+            abort(404)
         new_list = []
-        for review in (place.reviews):
+        for review in place.reviews:
             new_list.append(review.to_dict())
         return jsonify(new_list)
 
@@ -49,7 +48,7 @@ def route_delete(review_id=None):
 
 @app_views.route('/places/<place_id>/reviews', methods=['POST'],
                  strict_slashes=False)
-def route_post(place_id):
+def route_place_post(place_id):
     """State POST Route 32c11d3d-99a1-4406-ab41-7b6ccb7dd760 user
      place 3ebfaf23-cede-4cf0-964d-8afc17b11d02
     """
@@ -63,18 +62,18 @@ def route_post(place_id):
     user = storage.get(User, obj['user_id'])
     if user is None:
         abort(404)
-    amenitie = Review(**obj)
-    setattr(amenitie, "place_id", place_id)
-
-    storage.new(amenitie)
+    obj['place_id'] = place_id
+    review = Review(**obj)
+    storage.new(review)
     storage.save()
-    return make_response(jsonify(amenitie.to_dict()), 201)
+    return make_response(jsonify(review.to_dict()), 201)
 
 
 @app_views.route('/reviews/<review_id>', methods=['PUT'],
                  strict_slashes=False)
 def reviews_put(review_id=None):
     """ States PUT route """
+    ignore_keys = ['id', 'created_at', 'updated_at', 'place_id', 'user_id']
     obj = request.get_json()
     if obj is None:
         return make_response("Not a JSON", 400)
@@ -82,7 +81,7 @@ def reviews_put(review_id=None):
     if review is None:
         abort(404)
     for k, v in obj.items():
-        if k not in ['id', 'created_at', 'updated_at', 'place_id', 'user_id']:
+        if k not in ignore_keys:
             setattr(review, k, v)
     storage.save()
     return make_response(jsonify(review.to_dict()), 200)
