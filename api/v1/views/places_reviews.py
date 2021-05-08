@@ -22,6 +22,7 @@ def route_users(place_id=None):
         for review in place.reviews:
             new_list.append(review.to_dict())
         return jsonify(new_list)
+    abort(404)
 
 
 @app_views.route('/reviews/<review_id>', methods=['GET'],
