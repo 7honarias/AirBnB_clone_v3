@@ -57,13 +57,13 @@ def route_place_post(place_id):
     if place is None:
         abort(404)
     obj = request.get_json()
+    if obj is None:
+        return make_response("Not a JSON", 400)
     if 'user_id' not in obj:
         abort(400, 'Missing user_id')
     user = storage.get(User, obj['user_id'])
     if user is None:
         abort(404)
-    if obj is None:
-        return make_response("Not a JSON", 400)
     if 'text' not in obj:
         abort(400, 'Missing text')
     obj['place_id'] = place_id
