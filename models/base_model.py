@@ -57,7 +57,7 @@ class BaseModel:
         """updates the attribute 'updated_at' with the current datetime"""
         self.updated_at = datetime.utcnow()
         if hasattr(self, 'password') and models.storage_t == 'db':
-            self.password = md5(self.password.encode('utf-8'))
+            self.password = md5(self.password).hexdigest()
         models.storage.new(self)
         models.storage.save()
 
