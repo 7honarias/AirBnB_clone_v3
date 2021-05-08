@@ -72,8 +72,9 @@ class FileStorage:
     def get(self, cls, id):
         """ A method to retrieve one object """
         storage_all = self.all(cls)
-        if cls.__name__+'.'+id in storage_all:
-            return storage_all[cls.__name__+'.'+id]
+        if storage_all is not None:
+            if cls.__name__+'.'+id in storage_all:
+                return storage_all[cls.__name__+'.'+id]
         return None
 
     def count(self, cls=None):
