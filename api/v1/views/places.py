@@ -86,3 +86,40 @@ def places_put(place_id=None):
             setattr(place, k, v)
     storage.save()
     return make_response(jsonify(place.to_dict()), 200)
+
+
+@app_views.route('/places_search', methods=['POST'],
+                 strict_slashes=False)
+def places_search(place_id=None):
+    """state 9799648d-88dc-4e63-b858-32e6531bec5c
+    citie e4e40a6e-59ff-4b4f-ab72-d6d100201588"""
+    list_places = []
+    list_cities = []
+    obj = request.get_json()
+    if obj is None:
+        abort(400, "Not a JSON")
+    if obj == {}:
+        places = storage.all(Place)
+        for place in places.values():
+            list_places.append(place.to_dict())
+        return jsonify(list_places)
+    if "states" in obj:
+        for id_states in obj['states']:
+            state = storage.get(State, id_states)
+            for city in state.cities:
+                list_cities.append(city)
+    if "cities" in obj:
+        for id_cities in obj['cities']:
+            city = storage.get(City, id_cities)
+            if city not in list_cities:
+                list_cities.append(city)
+    if list_cities == []:
+        places = storage.all(Place)
+        for place in places.values():
+            list_places.append(place.to_dict())
+        return jsonify(list_places)
+    for cities in list_cities:
+        places = cities.places
+        for place in places:
+            list_places.append(place.to_dict())
+    return jsonify(list_places)
