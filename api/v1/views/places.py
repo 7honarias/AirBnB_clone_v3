@@ -49,7 +49,7 @@ def route_delete_place(place_id=None):
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
                  strict_slashes=False)
-def route_post_place(city_id):
+def route_post_place(city_id=None):
     """Places city route """
     city = storage.get(City, city_id)
     if city is None or user is None:
