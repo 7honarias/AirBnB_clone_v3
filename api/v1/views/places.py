@@ -91,12 +91,11 @@ def places_put(place_id=None):
 @app_views.route('/places_search', methods=['POST'],
                  strict_slashes=False)
 def places_search(place_id=None):
-    """ States PUT route """
+    """state 9799648d-88dc-4e63-b858-32e6531bec5c
+    citie e4e40a6e-59ff-4b4f-ab72-d6d100201588"""
     list_places = []
     list_cities = []
     obj = request.get_json()
-    print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
-    print(obj)
     if obj is None:
         abort(400, "Not a JSON")
     if obj == {}:
@@ -124,11 +123,3 @@ def places_search(place_id=None):
         for place in places:
             list_places.append(place.to_dict())
     return jsonify(list_places)
-
-
-
-    return make_response("here", 200)
-
-
-"""state 9799648d-88dc-4e63-b858-32e6531bec5c"""
-"""citie e4e40a6e-59ff-4b4f-ab72-d6d100201588"""
