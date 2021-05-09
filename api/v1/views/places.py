@@ -122,4 +122,11 @@ def places_search(place_id=None):
         places = cities.places
         for place in places:
             list_places.append(place.to_dict())
+    if "amenities" not in obj or obj['amenities'] == []:
+        return jsonify(list_places)
+    for places in list_places:
+        for amenity in obj["amenities"]:
+            if amenity in places.amenities:
+                continue
+            list_places.remove(places)
     return jsonify(list_places)
