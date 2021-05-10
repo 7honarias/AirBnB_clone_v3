@@ -135,8 +135,8 @@ def places_search():
     place_to_print = []
     for places in list_places:
         place_to_print.append(places.to_dict())
-        for amenity in amenities:
-            if amenity in places.amenities:
+        for amenity in list_amenities:
+            if amenity not in places.amenities:
                 place_to_print.pop()
                 break
     return jsonify(place_to_print)
