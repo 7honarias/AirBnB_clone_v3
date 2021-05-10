@@ -90,7 +90,7 @@ def places_put(place_id=None):
 
 @app_views.route('/places_search', methods=['POST'],
                  strict_slashes=False)
-def places_search(place_id=None):
+def places_search():
     """searches for a place"""
     if request.get_json() is not None:
         params = request.get_json()
