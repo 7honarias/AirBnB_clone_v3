@@ -109,8 +109,7 @@ def places_search():
     if states == cities == []:
         places = storage.all(Place)
         for place in places.values():
-            list_places.append(place.to_dict())
-        return jsonify(list_places)
+            list_places.append(place)
     if "states" in obj:
         for id_states in states:
             state = storage.get(State, id_states)
@@ -128,7 +127,6 @@ def places_search():
             if city not in list_cities:
                 list_cities.append(city)
     for cities in list_cities:
-        print(type(cities))
         places = cities.places
         for place in places:
             list_places.append(place)
