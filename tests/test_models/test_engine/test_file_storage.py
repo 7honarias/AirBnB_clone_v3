@@ -123,6 +123,8 @@ class TestFileStorage(unittest.TestCase):
         storage.save()
         get_state = storage.get(State, state.id)
         self.assertEqual(get_state, state)
+        get_obj = models.storage.get(State, "no-id-passed")
+        self.assertEqual(get_obj, None)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
@@ -135,29 +137,7 @@ class TestFileStorage(unittest.TestCase):
         storage.save()
         count = storage.count()
         self.assertEqual(len(storage.all()), count)
-
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_get2(self):
-        """Test get method"""
-        state_1 = State()
-        storage = FileStorage()
-        state_1.save()
-        get_obj = storage.get(State, state_1.id)
-        self.assertEqual(get_obj.id, state_1.id)
-        get_obj = storage.get(State, "257972592")
-        self.assertEqual(get_obj, None)
-
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_count2(self):
-        """Test count method"""
-        state_1 = State()
-        storage = FileStorage()
-        state_1.save()
-        objs = storage.all()
-        numbers = storage.count()
-        self.assertEqual(numbers, len(objs))
-        state_2 = State()
-        state_2.save()
-        objs = storage.all()
-        numbers_state = storage.count(State)
-        self.assertEqual(numbers_state, len(objs))
+        count = storage.count('Nothing')
+        self.assertEqual(len(storage.all('Nothing')), count)
+        count = storage.count(State)
+        self.assertEqual(len(storage.all(State)), count)
