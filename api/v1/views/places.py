@@ -93,18 +93,26 @@ def places_put(place_id=None):
 def places_search(place_id=None):
     """state 9799648d-88dc-4e63-b858-32e6531bec5c
     citie e4e40a6e-59ff-4b4f-ab72-d6d100201588"""
-    list_places = []
-    list_cities = []
     obj = request.get_json()
     if obj is None:
         abort(400, "Not a JSON")
-    if obj == {}:
+    list_places = []
+    list_cities = []
+    list_amenities = []
+    amenities = obj.get('amenities', [])
+    states = obj.get('states', [])
+    cities = obj.get('cities', [])
+    for amenity_id in amenities:
+        amenity = storage.get(Amenity, amenity_id)
+        if amenity:
+            list_amenities.append(amenity)
+    if states == cities == []:
         places = storage.all(Place)
         for place in places.values():
             list_places.append(place.to_dict())
         return jsonify(list_places)
     if "states" in obj:
-        for id_states in obj['states']:
+        for id_states in states:
             state = storage.get(State, id_states)
             for city in state.cities:
                 list_cities.append(city)
@@ -113,20 +121,15 @@ def places_search(place_id=None):
             city = storage.get(City, id_cities)
             if city not in list_cities:
                 list_cities.append(city)
-    if list_cities == []:
-        places = storage.all(Place)
-        for place in places.values():
-            list_places.append(place.to_dict())
-        return jsonify(list_places)
     for cities in list_cities:
         places = cities.places
         for place in places:
-            list_places.append(place.to_dict())
-    if "amenities" not in obj or obj['amenities'] == []:
-        return jsonify(list_places)
+            list_places.append(place)
+    place_to_print = []
     for places in list_places:
-        for amenity in obj["amenities"]:
+        place_to_print.append(places.to_dict())
+        for amenity in amenities:
             if amenity in places.amenities:
-                continue
-            list_places.remove(places)
-    return jsonify(list_places)
+                place_to_print.pop()
+                break
+    return jsonify(place_to_print)
