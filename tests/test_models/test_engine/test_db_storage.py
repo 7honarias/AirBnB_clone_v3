@@ -107,7 +107,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(len(storage.all()), count)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_get(self):
+    def test_get2(self):
         """Test get method"""
         new_attr = {'name': 'California'}
         state_1 = State(**new_attr)
@@ -118,7 +118,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(get_obj, None)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_count(self):
+    def test_count2(self):
         """Test count method"""
         new_attr = {'name': 'Texas'}
         state_1 = State(**new_attr)
