@@ -5,6 +5,7 @@ from flask import Blueprint, Flask, jsonify, make_response
 from os import environ
 from flask_cors import CORS
 from api.v1.views import app_views
+from flasgger import Swagger
 
 env = environ.copy()
 
@@ -13,6 +14,7 @@ app.register_blueprint(app_views)
 app.url_map.strict_slashes = False
 cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
 
+swagger = Swagger(app)
 
 @app.teardown_appcontext
 def teardown(exception):

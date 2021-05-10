@@ -16,7 +16,19 @@ from flask import make_response
 @app_views.route('/states/<state_id>', methods=['GET', 'DELETE'],
                  strict_slashes=False)
 def route_states(state_id=None):
-    """ States route """
+    """ States endpoint
+    This is using docstrings for specifications.
+    ---
+    parameters:
+      - name: state
+        in: path
+        type: string
+        required: true
+        default: all
+    responses:
+      200:
+        description: A list of states
+    """
     if state_id is None:
         all_states = storage.all(State)
         new_list = []
@@ -38,7 +50,19 @@ def route_states(state_id=None):
 @app_views.route('/states', methods=['POST'],
                  strict_slashes=False)
 def state_post():
-    """State POST Route"""
+    """ States endpoint
+    This is using docstrings for specifications.
+    ---
+    parameters:
+      - name: state
+        in: path
+        type: string
+        required: true
+        default: all
+    responses:
+      200:
+        description: A list of states
+    """
     obj = request.get_json()
     if obj is None:
         return make_response("Not a JSON", 400)
@@ -53,7 +77,19 @@ def state_post():
 @app_views.route('/states/<state_id>', methods=['PUT'],
                  strict_slashes=False)
 def states_put(state_id=None):
-    """ States PUT route """
+    """ States endpoint
+    This is using docstrings for specifications.
+    ---
+    parameters:
+      - name: state
+        in: path
+        type: string
+        required: true
+        default: all
+    responses:
+      200:
+        description: A list of states
+    """
     obj = request.get_json()
     if obj is None:
         return make_response("Not a JSON", 400)
