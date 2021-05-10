@@ -14,7 +14,6 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from models import storage
 import json
 import os
 import pep8
@@ -119,24 +118,20 @@ class TestFileStorage(unittest.TestCase):
     def test_get(self):
         """ Tests method for obtaining an instance file storage"""
         storage = FileStorage()
-        dic = {"name": "Vecindad"}
-        instance = State(**dic)
-        storage.new(instance)
+        state = State(**{'name': 'California'})
+        storage.new(state)
         storage.save()
-        storage = FileStorage()
-        get_instance = storage.get(State, instance.id)
-        self.assertEqual(get_instance, instance)
+        get_state = storage.get(State, state.id)
+        self.assertEqual(get_state, state)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
         """ Tests count method file storage """
         storage = FileStorage()
-        dic = {"name": "Vecindad"}
-        state = State(**dic)
+        state = State(**{'name': 'California'})
         storage.new(state)
-        dic = {"name": "Mexico"}
-        city = City(**dic)
+        city = City(**{"name": "Miami", "state_id": state.id})
         storage.new(city)
         storage.save()
-        c = storage.count()
-        self.assertEqual(len(storage.all()), c)
+        count = storage.count()
+        self.assertEqual(len(storage.all()), count)
