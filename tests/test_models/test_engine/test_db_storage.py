@@ -14,7 +14,6 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from models import storage
 import json
 import os
 import pep8
@@ -88,26 +87,29 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
-    def test_get_db(self):
-        """ Tests method for obtaining an state db storage"""
-        state = State(**{'name': 'California'})
-        storage.new(state)
-        storage.save()
-        get_state = storage.get(State, state.id)
-        self.assertEqual(get_state, state)
-        get_obj = models.storage.get(State, "no-id-passed")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test get method"""
+        new_attr = {'name': 'California'}
+        state_1 = State(**new_attr)
+        state_1.save()
+        get_obj = models.storage.get(State, state_1.id)
+        self.assertEqual(get_obj.id, state_1.id)
+        get_obj = models.storage.get(State, "5793527727")
         self.assertEqual(get_obj, None)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing file storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
-        """ Tests count method db storage """
-        state = State(**{'name': 'California'})
-        storage.new(state)
-        city = City(**{"name": "Miami", "state_id": state.id})
-        storage.new(city)
-        storage.save()
-        count = storage.count()
-        self.assertEqual(len(storage.all()), count)
-        count = storage.count(State)
-        self.assertEqual(len(storage.all(State)), count)
+        """Test count method"""
+        new_attr = {'name': 'Texas'}
+        state_1 = State(**new_attr)
+        state_1.save()
+        objs = models.storage.all()
+        numbers = models.storage.count()
+        self.assertEqual(numbers, len(objs))
+        new_attr = {'name': 'Florida'}
+        state_2 = State(**new_attr)
+        state_2.save()
+        objs = models.storage.all()
+        numbers_state = models.storage.count(State)
+        self.assertEqual(numbers_state, len(objs))

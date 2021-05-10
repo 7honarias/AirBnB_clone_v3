@@ -70,6 +70,15 @@ test_file_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
+
+    def tearDown(self):
+        """set enviroment when testing is finished"""
+        # Empty objects in engine
+        FileStorage._FileStorage__objects = {}
+        # Remove file.json if exists
+        if os.path.exists("file.json"):
+            os.remove("file.json")
+
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_all_returns_dict(self):
         """Test that all returns the FileStorage.__objects attr"""
@@ -116,26 +125,26 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_get(self):
-        """ Tests method for obtaining an instance file storage"""
+        """Test get method"""
+        state_1 = State()
         storage = FileStorage()
-        state = State(**{'name': 'California'})
-        storage.new(state)
-        storage.save()
-        get_state = storage.get(State, state.id)
-        self.assertEqual(get_state, state)
-        get_obj = models.storage.get(State, "no-id-passed")
+        state_1.save()
+        get_obj = storage.get(State, state_1.id)
+        self.assertEqual(get_obj.id, state_1.id)
+        get_obj = storage.get(State, "257972592")
         self.assertEqual(get_obj, None)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_count(self):
-        """ Tests count method file storage """
+        """Test count method"""
+        state_1 = State()
         storage = FileStorage()
-        state = State(**{'name': 'California'})
-        storage.new(state)
-        city = City(**{"name": "Miami", "state_id": state.id})
-        storage.new(city)
-        storage.save()
-        count = storage.count()
-        self.assertEqual(len(storage.all()), count)
-        count = storage.count(State)
-        self.assertEqual(len(storage.all(State)), count)
+        state_1.save()
+        objs = storage.all()
+        numbers = storage.count()
+        self.assertEqual(numbers, len(objs))
+        state_2 = State()
+        state_2.save()
+        objs = storage.all()
+        numbers_state = storage.count(State)
+        self.assertEqual(numbers_state, len(objs))
