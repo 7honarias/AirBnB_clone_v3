@@ -16,6 +16,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
 
 swagger = Swagger(app)
 
+
 @app.teardown_appcontext
 def teardown(exception):
     """close storage"""
